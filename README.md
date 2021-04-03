@@ -28,7 +28,7 @@ func (foo Foo)FuncC(arg0 string, arg1 int)(res0 string, res1 string, err error){
 ```
 
 
-fakeDynamicCall have some extent flexible, but it's based on `switch case`
+[fakeDynamicCall](https://github.com/huahuayu/go-dynamic-call/blob/1b28c655e79218b66c4db1d391c717aaae9e103f/main.go#L26) have some extent flexible, but it's based on `switch case`
 
 ```go
 func fakeDynamicCall(fn string, args map[string]interface{}){
@@ -46,7 +46,7 @@ func fakeDynamicCall(fn string, args map[string]interface{}){
 }
 ```
 
-while the trueDynamicCall is base on `reflect`
+while the [trueDynamicCall](https://github.com/huahuayu/go-dynamic-call/blob/1b28c655e79218b66c4db1d391c717aaae9e103f/main.go#L40) is base on `reflect`
 
 ```go
 func tureDynamicCall(obj interface{}, fn string, args map[string]interface{}) (res []reflect.Value){
