@@ -1,5 +1,7 @@
 # go dynamic function call
 
+call a go function by string function name
+
 foo.go
 
 ```go
@@ -25,25 +27,10 @@ func (foo Foo)FuncC(arg0 string, arg1 int)(res0 string, res1 string, err error){
 }
 ```
 
-main.go
+
+fakeDynamicCall have some extent flexible, but it's based on `switch case`
 
 ```go
-package main
-
-import (
-	"fmt"
-	"github.com/huahuayu/dynamic-call/foo"
-)
-
-func main(){
-	funcName := "FuncA"
-	args := make(map[string]interface{},0)
-	args["arg0"] = "arg0"
-	args["arg1"] = 0
-	fakeDynamicCall(funcName,args)
-}
-
-// the case statements are similar, which repeated myself
 func fakeDynamicCall(fn string, args map[string]interface{}){
 	foo := new(foo.Foo)
 	switch fn {
@@ -59,13 +46,22 @@ func fakeDynamicCall(fn string, args map[string]interface{}){
 }
 ```
 
-How to replace the `switch...case statement` to more generic way for dynamic call function? Something like this
+while the trueDynamicCall is base on `reflect`
 
 ```go
-func trueDynamicCall(fn string, args map[string]interface{}){
-	foo := new(foo.Foo)
-	foo.$fn(args["arg0"].(string),args["arg1"].(int))
+func tureDynamicCall(obj interface{}, fn string, args map[string]interface{}) (res []reflect.Value){
+    method := reflect.ValueOf(obj).MethodByName(fn)
+    var inputs []reflect.Value
+    for _, v := range args {
+        inputs = append(inputs, reflect.ValueOf(v))
+    }
+    return method.Call(inputs)
 }
 ```
 
-Here is a good [example](https://medium.com/@vicky.kurniawan/go-call-a-function-from-string-name-30b41dcb9e12), but it's the function & function caller are in same package, what if there are in different package as my example?
+## reference
+
+more [example](https://medium.com/@vicky.kurniawan/go-call-a-function-from-string-name-30b41dcb9e12)
+
+thanks [@miguelmota](https://github.com/miguelmota) for the `reflect` solution!
+
